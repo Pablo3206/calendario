@@ -563,6 +563,25 @@ setInterval(updateRecordatorios, 1000);
     cell.appendChild(badge);
   }
 */
+// ----------------------------------
+// Flechas: abrir modales de Turnos y Trabajos
+// ----------------------------------
+const openHospiBtn = document.getElementById('openHospiModal');
+if (openHospiBtn) {
+  openHospiBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (turnosModal) turnosModal.classList.remove('hidden');
+  });
+}
+
+const openFrikiBtn = document.getElementById('openFrikiModal');
+if (openFrikiBtn) {
+  openFrikiBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (trabajosModal) trabajosModal.classList.remove('hidden');
+  });
+}
+
 function createEventOnCalendar(dateStr, title, startTime, endTime, classes, evObj = {}) {
   // Construir el objeto completo del evento
   const ev = {

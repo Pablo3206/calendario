@@ -109,43 +109,50 @@
           <h2 class="text-xl font-semibold p-4">Trabajitos</h2>
           <div class="space-y-4 p-4">
             <!-- Hospi -->
-            <button
-              class="w-full flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors cursor-pointer user-select"
+            <div
+              class="w-full flex items-center justify-between p-3 bg-green-50 rounded-lg"
               data-user="hospi"
             >
               <div class="flex items-center">
                 <div
-                  class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
                   id="iconHospi"
-
+                  class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3 cursor-pointer"
                 >
                   <i class="ri-hospital-line text-green-500"></i>
                 </div>
                 <span class="text-gray-800">Hospi</span>
               </div>
-              <div class="w-6 h-6 flex items-center justify-center">
+              <button
+                id="openHospiModal"
+                class="w-6 h-6 flex items-center justify-center focus:outline-none"
+              >
                 <i class="ri-arrow-right-s-line text-green-500"></i>
-              </div>
-            </button>
+              </button>
+            </div>
+          
             <!-- Friki -->
-            <button
-              class="w-full flex items-center justify-between p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer user-select"
+            <div
+              class="w-full flex items-center justify-between p-3 bg-orange-50 rounded-lg"
               data-user="friki"
             >
               <div class="flex items-center">
                 <div
-                  class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3"
                   id="iconFriki"
+                  class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3 cursor-pointer"
                 >
                   <i class="ri-gamepad-line text-orange-500"></i>
                 </div>
                 <span class="text-gray-800">Friki</span>
               </div>
-              <div class="w-6 h-6 flex items-center justify-center">
+              <button
+                id="openFrikiModal"
+                class="w-6 h-6 flex items-center justify-center focus:outline-none"
+              >
                 <i class="ri-arrow-right-s-line text-orange-500"></i>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
+          
         </div>
         <!-- Momentos Especiales -->
         <div class="border-b border-gray-200">
