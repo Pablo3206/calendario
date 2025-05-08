@@ -387,18 +387,24 @@ if (cellMonth === m && cellYear === y) {
     prevBtn.addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() - 1);
       generateCalendar(currentDate);
+      fetchEventos();
+
     });
   }
   if (nextBtn) {
     nextBtn.addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       generateCalendar(currentDate);
+      fetchEventos();
+
     });
   }
   if (todayBtn) {
     todayBtn.addEventListener("click", () => {
       currentDate = new Date();
       generateCalendar(currentDate);
+      fetchEventos();
+
     });
   }
   // Primera carga
