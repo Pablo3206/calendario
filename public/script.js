@@ -351,30 +351,31 @@ newTrabajoBtn.addEventListener('click', () => {
       divNum.textContent = num;
       cell.appendChild(divNum);
   
-      // 2) Aquí pegas el bloque del “+” — oculto y aparece al hover
-      const addBtn = document.createElement("div");
-      addBtn.className =
-        "add-event-btn absolute top-2 right-2 bg-gray-200 bg-opacity-70 " +
-        "rounded-full w-6 h-6 flex items-center justify-center " +
-        "cursor-pointer opacity-0 transition-opacity";
-      addBtn.innerHTML = '<i class="ri-add-line text-base"></i>';
-      addBtn.addEventListener("click", e => {
-        e.stopPropagation();
-        // guardamos la fecha clicada
-        selectedDate = cell.dataset.date;
-        // rellenamos el modal de Crear Evento
-        document.getElementById("eventStartDate").value = selectedDate;
-        document.getElementById("eventEndDate").value   = selectedDate;
-        document.getElementById("eventStartTime").value = "09:00";
-        document.getElementById("eventEndTime").value   = "10:00";
-        // abrimos el modal
-        document.getElementById("eventTitle").value       = "";
-        document.getElementById("eventDescription").value = "";
-        document.getElementById("eventLocation").value    = "";
+// 2) Sólo pongo “+” en las celdas del mes que estamos viendo
+if (cellMonth === m && cellYear === y) {
+  const addBtn = document.createElement("div");
+  addBtn.className =
+    "add-event-btn absolute top-2 right-2 bg-gray-200 bg-opacity-70 " +
+    "rounded-full w-6 h-6 flex items-center justify-center " +
+    "cursor-pointer opacity-0 transition-opacity";
+  addBtn.innerHTML = '<i class="ri-add-line text-base"></i>';
+  addBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    // guardamos la fecha clicada
+    selectedDate = cell.dataset.date;
+    // rellenamos el modal de Crear Evento
+    document.getElementById("eventStartDate").value = selectedDate;
+    document.getElementById("eventEndDate").value   = selectedDate;
+    document.getElementById("eventStartTime").value = "09:00";
+    document.getElementById("eventEndTime").value   = "10:00";
+    document.getElementById("eventTitle").value       = "";
+    document.getElementById("eventDescription").value = "";
+    document.getElementById("eventLocation").value    = "";
+    crearEventoModal.classList.remove("hidden");
+  });
+  cell.appendChild(addBtn);
+}
 
-        if (crearEventoModal) crearEventoModal.classList.remove("hidden");
-      });
-      cell.appendChild(addBtn);
   
       // 3) Añadir la celda al grid
       calendarGrid.appendChild(cell);
