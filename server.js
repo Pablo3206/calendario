@@ -19,7 +19,9 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
   });
   
-  
+  pool.on('connect', client => {
+    client.query("SET TIME ZONE 'Europe/Madrid';");
+  });
 
 app.use(express.static('public'));
 // Endpoint para verificar conexión a la base de datos
@@ -85,8 +87,9 @@ app.get('/api/eventos', async (_, res) => {
          titulo,
          descripcion,
          ubicacion,
-         to_char(fecha_inicio AT TIME ZONE 'Europe/Madrid', 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_inicio,
-         to_char(fecha_fin    AT TIME ZONE 'Europe/Madrid', 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_fin,
+        to_char(fecha_inicio, 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_inicio,
+        to_char(fecha_fin,    'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_fin,
+
          usuario,
          tipo_id
        FROM eventos
