@@ -388,7 +388,7 @@ if (cellMonth === m && cellYear === y) {
       currentDate.setMonth(currentDate.getMonth() - 1);
       generateCalendar(currentDate);
       fetchEventos();
-
+      attachDayEventHandlers();
     });
   }
   if (nextBtn) {
@@ -396,15 +396,16 @@ if (cellMonth === m && cellYear === y) {
       currentDate.setMonth(currentDate.getMonth() + 1);
       generateCalendar(currentDate);
       fetchEventos();
-
+      attachDayEventHandlers();
     });
+    
   }
   if (todayBtn) {
     todayBtn.addEventListener("click", () => {
       currentDate = new Date();
       generateCalendar(currentDate);
       fetchEventos();
-
+      attachDayEventHandlers();
     });
   }
   // Primera carga
