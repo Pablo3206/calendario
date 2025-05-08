@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------------------
   // Modales de Turnos y Trabajos
   // ----------------------------------
-  const userSelectors      = document.querySelectorAll(".user-select");
   const turnosModal        = document.getElementById("turnosModal");
   const trabajosModal      = document.getElementById("trabajosModal");
   const closeTurnosModal   = document.getElementById("closeTurnosModal");
@@ -40,16 +39,7 @@ const updateBtn              = document.getElementById("updateBtn");
 const deleteBtn              = document.getElementById("deleteBtn");
 const eventoEditForm         = document.getElementById("eventoEditForm");
 
-  userSelectors.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const userId = btn.dataset.user;
-      if (userId === "hospi" && turnosModal) {
-        turnosModal.classList.remove("hidden");
-      } else if (userId === "friki" && trabajosModal) {
-        trabajosModal.classList.remove("hidden");
-      }
-    });
-  });
+
   if (closeTurnosModal && turnosModal) {
     closeTurnosModal.addEventListener("click", () =>
       turnosModal.classList.add("hidden")
