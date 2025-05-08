@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextBtn               = document.getElementById("nextMonth");
   const todayBtn              = document.getElementById("todayBtn");
   const calendarGrid          = document.getElementById("calendarGrid");
+  const hiddenUsers = new Set();
 
   // ----------------------------------
   // Modal de Notificaciones
@@ -460,6 +461,25 @@ nameSpans.forEach(span => {
     // Guardamos la elección
     selectedUser = user;
     console.log("Usuario seleccionado:", selectedUser);
+  });
+});
+['pablo', 'paula', 'both', 'hospi', 'friki'].forEach(user => {
+  const icon = document.getElementById(`icon${user.charAt(0).toUpperCase() + user.slice(1)}`);
+  if (!icon) return;
+  icon.style.cursor = 'pointer';
+  icon.addEventListener('click', () => {
+    // alterna en el set
+    if (hiddenUsers.has(user)) {
+      hiddenUsers.delete(user);
+      // desatura la tarjeta
+      document.querySelector(`.user-card[data-user="${user}"]`).classList.remove('opacity-50');
+    } else {
+      hiddenUsers.add(user);
+      // aplica desaturación a la tarjeta
+      document.querySelector(`.user-card[data-user="${user}"]`).classList.add('opacity-50');
+    }
+    // refresca vista
+    refreshEvents();
   });
 });
 // ----------------------------
@@ -1107,8 +1127,9 @@ async function fetchEventos() {
     const eventos = await res.json();
     events.length = 0; // limpiamos el array antes de repoblarlo
     eventos.forEach(ev => {
-      let classes = '';
-      if (ev.usuario === 'pablo') {
+      if (hiddenUsers.has(ev.usuario)) return;
+
+      let classes = '';      if (ev.usuario === 'pablo') {
         classes = 'bg-blue-100 text-blue-800';
       } else if (ev.usuario === 'paula') {
         classes = 'bg-pink-100 text-pink-800';
