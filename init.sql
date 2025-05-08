@@ -1,0 +1,22 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS tipos (
+  id SERIAL PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  inicio TIME NOT NULL,
+  fin TIME NOT NULL,
+  categoria TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS eventos (
+  id SERIAL PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  descripcion TEXT,
+  ubicacion TEXT,
+  fecha_inicio TIMESTAMP WITH TIME ZONE NOT NULL,
+  fecha_fin TIMESTAMP WITH TIME ZONE NOT NULL,
+  usuario TEXT NOT NULL,
+  tipo_id INTEGER REFERENCES tipos(id)
+);
+
+COMMIT;

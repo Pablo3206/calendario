@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario de Eventos</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FF4B4B", secondary: "#3B82F6" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="bg-gray-50">
+    <div class="flex h-screen">
+      <!-- Panel izquierdo -->
+      <div class="w-1/5 border-r border-gray-200 overflow-y-auto">
+        <!-- Usuarios -->
+        <div class="border-b border-gray-200">
+          <h2 class="text-xl font-semibold p-4">Nosotros</h2>
+          <div class="space-y-4 p-4">
+<!-- Pablo -->
+<div
+  class="w-full flex items-center justify-between p-3 bg-blue-50 rounded-lg user-card"
+  data-user="pablo"
+>
+  <div class="flex items-center">
+    <div
+      class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 cursor-pointer"
+      id="iconPablo"
+    >
+      <i class="ri-user-line text-blue-500"></i>
+    </div>
+    <span
+      class="text-gray-800 user-name cursor-pointer"
+      data-user="pablo"
+    >Pablo</span>
+  </div>
+</div>
+
+<!-- Paula -->
+<div
+  class="w-full flex items-center justify-between p-3 bg-pink-50 rounded-lg user-card"
+  data-user="paula"
+>
+  <div class="flex items-center">
+    <div
+      class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center mr-3 cursor-pointer"
+      id="iconPaula"
+    >
+      <i class="ri-user-line text-pink-500"></i>
+    </div>
+    <span
+      class="text-gray-800 user-name cursor-pointer"
+      data-user="paula"
+    >Paula</span>
+  </div>
+</div>
+
+          </div>
+        </div>
+        <!-- Gestión -->
+        <div class="border-b border-gray-200">
+          <h2 class="text-xl font-semibold p-4">Trabajitos</h2>
+          <div class="space-y-4 p-4">
+            <!-- Hospi -->
+            <button
+              class="w-full flex items-center justify-between p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors cursor-pointer user-select"
+              data-user="hospi"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
+                >
+                  <i class="ri-hospital-line text-green-500"></i>
+                </div>
+                <span class="text-gray-800">Hospi</span>
+              </div>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-right-s-line text-green-500"></i>
+              </div>
+            </button>
+            <!-- Friki -->
+            <button
+              class="w-full flex items-center justify-between p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer user-select"
+              data-user="friki"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3"
+                >
+                  <i class="ri-gamepad-line text-orange-500"></i>
+                </div>
+                <span class="text-gray-800">Friki</span>
+              </div>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-right-s-line text-orange-500"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+        <!-- Momentos Especiales -->
+        <div class="border-b border-gray-200">
+          <h2 class="text-xl font-semibold p-4">Cositas Chulas</h2>
+          <div class="space-y-3 p-4">
+            <button
+              id="floresBtn"
+              class="w-full py-3 px-4 bg-pink-100 rounded-md flex items-center text-pink-600 !rounded-button whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-gift-line"></i>
+              </div>
+              <span>Pulsa para un ramo de flores</span>
+            </button>
+            <button
+              class="w-full py-3 px-4 bg-pink-100 rounded-md flex items-center text-pink-600 !rounded-button whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-heart-line"></i>
+              </div>
+              <span>Pulsa para ver algo bonito</span>
+            </button>
+            <button
+              class="w-full py-3 px-4 bg-blue-100 rounded-md flex items-center text-blue-600 !rounded-button whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-user-line"></i>
+              </div>
+              <span>Pulsa para ver a Pablo</span>
+            </button>
+            <button
+              class="w-full py-3 px-4 bg-pink-100 rounded-md flex items-center text-pink-600 !rounded-button whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-user-line"></i>
+              </div>
+              <span>Pulsa para ver a Paula</span>
+            </button>
+            <button
+              class="w-full py-3 px-4 bg-purple-100 rounded-md flex items-center text-purple-600 !rounded-button whitespace-nowrap"
+              id="notificacionesBtn"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-notification-line"></i>
+              </div>
+              <span>Notificaciones</span>
+            </button>
+          </div>
+        </div>
+        <!-- Recordatorios -->
+<!-- Recordatorios -->
+<div>
+  <h2 class="text-xl font-semibold p-4">Recordatorios</h2>
+  <ul id="recordatoriosList" class="space-y-2 p-4 text-pink-400 text-center">
+    <li>
+      Añitoo: <span id="countdown-paellas" class="font-mono">cargando…</span>
+    </li>
+    <li>
+      Vernos: <span id="countdown-verte" class="font-mono">cargando…</span>
+    </li>
+    <li>
+      Bali: <span id="countdown-bali" class="font-mono">cargando…</span>
+    </li>
+    <li>
+      Gradu Paula: <span id="countdown-gradu-paula" class="font-mono">cargando…</span>
+    </li>
+    <li>
+      Gradu Pablo: <span id="countdown-gradu-pablo" class="font-mono">cargando…</span>
+    </li>
+  </ul>
+</div>
+
+      </div>
+
+      <!-- Panel derecho - Calendario -->
+      <div class="w-4/5 p-4 flex justify-center items-center">
+        <div class="w-full h-auto rounded-lg p-4">
+          <!-- Cabecera del calendario -->
+          <div class="flex justify-between items-center mb-6">
+            <h2 id="monthYear" class="text-xl font-semibold"></h2>
+            <div class="flex space-x-2">
+              <button
+                id="prevMonth"
+                class="p-2 rounded-full hover:bg-gray-100 !rounded-button whitespace-nowrap"
+              >
+                <i class="ri-arrow-left-s-line text-lg"></i>
+              </button>
+              <button
+                id="nextMonth"
+                class="p-2 rounded-full hover:bg-gray-100 !rounded-button whitespace-nowrap"
+              >
+                <i class="ri-arrow-right-s-line text-lg"></i>
+              </button>
+              <button
+                id="todayBtn"
+                class="px-3 py-1 bg-blue-500 text-white rounded-md ml-2 !rounded-button whitespace-nowrap"
+              >
+                Hoy
+              </button>
+            </div>
+          </div>
+          <!-- Días de la semana -->
+          <div class="grid grid-cols-7 mb-2">
+            <div class="text-center font-medium text-gray-500 py-2">Lun</div>
+            <div class="text-center font-medium text-gray-500 py-2">Mar</div>
+            <div class="text-center font-medium text-gray-500 py-2">Mié</div>
+            <div class="text-center font-medium text-gray-500 py-2">Jue</div>
+            <div class="text-center font-medium text-gray-500 py-2">Vie</div>
+            <div class="text-center font-medium text-gray-500 py-2">Sáb</div>
+            <div class="text-center font-medium text-gray-500 py-2">Dom</div>
+          </div>
+          <!-- Grid del calendario dinámico -->
+          <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modales (idénticos a tu versión, aquí los incluyes todos) -->
+    <!-- Modal Notificaciones -->
+<!-- Modal Notificaciones -->
+<div
+  id="notificacionesModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <!-- Botón de cierre -->
+    <button
+      id="closeNotificacionesModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+
+    <h3 class="text-xl font-semibold mb-4">Notificaciones</h3>
+
+    <!-- Lista de botones de notificación -->
+    <div class="space-y-3">
+      <button class="w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 rounded-lg">
+        Amoreeeee
+      </button>
+      <button class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 rounded-lg">
+        Ya he llegado bb
+      </button>
+      <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-lg">
+        Holaaa
+      </button>
+      <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg">
+        Te echo de menoos
+      </button>
+      <button class="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 rounded-lg">
+        Acaba de mear un perrete
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Crear Evento -->
+<div
+  id="crearEventoModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <!-- Cerrar -->
+    <button
+      id="closeCrearEventoModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+
+    <h3 class="text-2xl font-semibold mb-4 text-center">Crear Evento</h3>
+
+    <form id="eventoForm" class="space-y-4">
+      <!-- Título -->
+      <div>
+        <label for="eventTitle" name="eventTitle" class="block text-sm font-medium text-gray-700 mb-1">
+          Título
+        </label>
+        <input
+          type="text"
+          id="eventTitle"
+          name="eventTitle"
+          required
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <label for="eventDescription" name="eventDescription" class="block text-sm font-medium text-gray-700 mb-1">
+          Descripción
+        </label>
+        <textarea
+          id="eventDescription"
+          rows="3"
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        ></textarea>
+      </div>
+
+      <!-- Ubicación -->
+      <div>
+        <label for="eventLocation" name="eventLocation" class="block text-sm font-medium text-gray-700 mb-1">
+          Ubicación
+        </label>
+        <input
+          type="text"
+          id="eventLocation"
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      <!-- Fecha y hora -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="eventStartDate" name = "fechaIni" class="block text-sm font-medium text-gray-700 mb-1">
+            Fecha inicio
+          </label>
+          <input
+            type="date"
+            id="eventStartDate"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="eventStartTime"  name = "horaIni" class="block text-sm font-medium text-gray-700 mb-1">
+            Hora inicio
+          </label>
+          <input
+            type="time"
+            id="eventStartTime"
+            value="09:00"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="eventEndDate" name = "fechaFin" class="block text-sm font-medium text-gray-700 mb-1">
+            Fecha fin
+          </label>
+          <input
+            type="date"
+            id="eventEndDate"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="eventEndTime" name = "fechaFin" class="block text-sm font-medium text-gray-700 mb-1">
+            Hora fin
+          </label>
+          <input
+            type="time"
+            id="eventEndTime"
+            value="10:00"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+
+<!-- Usuarios -->
+<div class="mt-6 text-center">
+  <h4 class="text-lg font-semibold text-gray-700 mb-4">Nosotros</h4>
+  <div class="flex justify-center space-x-4">
+    <button
+      id="userPabloBtnModal"
+      class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-lg"
+    >
+      Pablo
+    </button>
+    <button
+      id="userPaulaBtnModal"
+      class="px-4 py-2 bg-pink-100 hover:bg-pink-200 text-pink-600 font-medium rounded-lg"
+    >
+      Paula
+    </button>
+    <button
+      id="userHospiBtnModal"
+      class="px-4 py-2 bg-green-100 hover:bg-green-200 text-green-600 font-medium rounded-lg"
+    >
+      Hospi
+    </button>
+    <button
+      id="userFrikiBtnModal"
+      class="px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-600 font-medium rounded-lg"
+    >
+      Friki
+    </button>
+    <!-- Botones de acción -->
+
+  </div>
+  <div class="mt-4 flex justify-between">
+    <!-- Botón para crear (POST) -->    <!-- Botones para editar/eliminar -->
+    <button id="btnActualizar" class="px-4 py-2 bg-green-500 text-white rounded-lg hidden">Actualizar</button>
+    <button id="btnEliminar"  class="px-4 py-2 bg-red-500   text-white rounded-lg hidden">Eliminar</button>
+  </div>
+</div>
+
+
+
+    </form>
+  </div>
+</div>
+<!-- Modal Lista de Turnos (nuevo) -->
+<div
+  id="listaTurnosModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 relative">
+    <button
+      id="closeListaTurnosModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+    <h4 class="text-xl font-semibold mb-4 text-center">Turnos Disponibles</h4>
+    <div id="listaTurnosButtons" class="space-y-3">
+      <!-- Aquí se insertarán botones -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal Lista de Trabajos (nuevo) -->
+<div
+  id="listaTrabajosModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 relative">
+    <button
+      id="closeListaTrabajosModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+    <h4 class="text-xl font-semibold mb-4 text-center">Trabajos Disponibles</h4>
+    <div id="listaTrabajosButtons" class="space-y-3">
+      <!-- Aquí se insertarán botones -->
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Turnos Hospi -->
+<div
+  id="turnosModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <button
+      id="closeTurnosModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+    <h3 class="text-xl font-semibold mb-4">Gestión de Turnos</h3>
+
+    <div id="turnosList" class="space-y-2"></div>
+    <form id="turnoForm" class="mt-6 space-y-4">
+      <div>
+        <input
+          type="text"
+          placeholder="Nombre del turno"
+          required
+          class="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div class="flex space-x-2">
+        <input type="time" required class="flex-1 border rounded px-3 py-2" />
+        <input type="time" required class="flex-1 border rounded px-3 py-2" />
+        <button
+          type="submit"
+          id="turnoSubmitBtn"
+          class="bg-green-500 text-white px-4 py-2 rounded-lg"
+        >
+          Añadir
+        </button>
+        <button
+          type="button"
+          id="newTurnoBtn"
+          class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg"
+        >
+          Nuevo
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Trabajos Friki -->
+<div
+  id="trabajosModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <button
+      id="closeTrabajosModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+    <h3 class="text-xl font-semibold mb-4">Gestión de Trabajos</h3>
+
+   <!-- Dentro de Modal Trabajos Friki -->
+<div id="trabajosList" class="space-y-2"></div>
+<form id="trabajoForm" class="mt-6 space-y-4">
+  <div>
+    <input
+      type="text"
+      placeholder="Nombre del trabajo"
+      required
+      class="w-full border rounded px-3 py-2"
+    />
+  </div>
+  <div class="flex space-x-2">
+    <input type="time" required class="flex-1 border rounded px-3 py-2" />
+    <input type="time" required class="flex-1 border rounded px-3 py-2" />
+    <button
+      type="submit"
+      id="trabajoSubmitBtn"
+      class="bg-orange-500 text-white px-4 py-2 rounded-lg"
+    >
+      Añadir
+    </button>
+    <button
+      type="button"
+      id="newTrabajoBtn"
+      class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg"
+    >
+      Nuevo
+    </button>
+  </div>
+</form>
+  </div>
+</div>
+
+
+<!-- Modal Editar/Eliminar Evento -->
+<div
+  id="editarEventoModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <!-- Botón de cierre -->
+    <button
+      id="closeEditarEventoModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+
+    <h3 class="text-2xl font-semibold mb-4 text-center">Editar Evento</h3>
+
+    <form id="eventoEditForm" class="space-y-4">
+      <!-- Título -->
+      <div>
+        <label for="editEventTitle" class="block text-sm font-medium text-gray-700 mb-1">
+          Título
+        </label>
+        <input
+          type="text"
+          id="editEventTitle"
+          required
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <label for="editEventDescription" class="block text-sm font-medium text-gray-700 mb-1">
+          Descripción
+        </label>
+        <textarea
+          id="editEventDescription"
+          rows="3"
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        ></textarea>
+      </div>
+
+      <!-- Ubicación -->
+      <div>
+        <label for="editEventLocation" class="block text-sm font-medium text-gray-700 mb-1">
+          Ubicación
+        </label>
+        <input
+          type="text"
+          id="editEventLocation"
+          class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      <!-- Fecha y hora -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="editEventStartDate" class="block text-sm font-medium text-gray-700 mb-1">
+            Fecha inicio
+          </label>
+          <input
+            type="date"
+            id="editEventStartDate"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="editEventStartTime" class="block text-sm font-medium text-gray-700 mb-1">
+            Hora inicio
+          </label>
+          <input
+            type="time"
+            id="editEventStartTime"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="editEventEndDate" class="block text-sm font-medium text-gray-700 mb-1">
+            Fecha fin
+          </label>
+          <input
+            type="date"
+            id="editEventEndDate"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label for="editEventEndTime" class="block text-sm font-medium text-gray-700 mb-1">
+            Hora fin
+          </label>
+          <input
+            type="time"
+            id="editEventEndTime"
+            required
+            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+
+      <!-- Botones Actualizar / Eliminar -->
+      <div class="mt-4 flex justify-between">
+        <button
+          id="updateBtn"
+          type="button"
+          class="px-4 py-2 bg-green-500 text-white rounded-lg"
+        >
+          Actualizar
+        </button>
+        <button
+          id="deleteBtn"
+          type="button"
+          class="px-4 py-2 bg-red-500 text-white rounded-lg"
+        >
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Modal para Vista Día -->
+<div
+  id="diaEventosModal"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-3/4 h-4/5 overflow-y-auto p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 id="diaModalTitle" class="text-lg font-semibold">Eventos del día</h3>
+      <button id="closeDiaEventosModal" class="text-gray-500 hover:text-gray-700">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div id="dayHourList" >
+      <!-- Aquí se inyectan las filas de horas -->
+    </div>
+    <div class="mt-4 flex justify-end">
+      <button
+        id="addEventoDia"
+        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        Añadir Evento
+      </button>
+    </div>
+  </div>
+</div>
+
+
+    <script src="./script.js"></script>
+  </body>
+</html>

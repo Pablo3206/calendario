@@ -1,0 +1,207 @@
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+  position: relative;
+  z-index: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("fondo.jpg") center center / cover no-repeat;
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+}
+/* …tus animaciones, resets y estilos generales… */
+/* —————————————————————————————
+   Google Fonts: Playfair Display + Poppins
+——————————————————————————————————— */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
+
+/* Ajuste: elimina el fondo fijo del antiguo .calendar-grid.
+   Ahora usamos #calendarGrid en HTML */
+#calendarGrid {
+  background: transparent;
+}
+.event-block:hover {
+  cursor: pointer;
+}
+
+/* Estilos de celdas y eventos: */
+.calendar-day {
+  min-height: 120px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(55, 65, 81, 0.7) !important;
+  position: relative;
+
+}
+/* Asegura que cada día sea relative */
+.calendar-day {
+  position: relative;
+}
+
+/* Badge del primer evento: centrado y debajo del número */
+.event-badge {
+  position: absolute;
+  top: 2.5rem;               /* justo debajo del número */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;       /* evita saltos */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 5;
+}
+
+/* Contador “+X” centrado justo debajo del badge */
+.more-events {
+  position: absolute;
+  top: 4.75rem;              /* un poco más abajo que el badge */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  color: #4B5563;            /* gray-600 */
+  z-index: 5;
+}
+
+
+
+.calendar-day:hover .add-event-btn {
+  opacity: 1;
+}
+.add-event-btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10; /* para que quede siempre encima */
+}
+
+.event-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Si quieres, puedes añadir más reglas CSS aquí… */
+/* Formularios de Turnos y Trabajos */
+#turnoForm input,
+#turnoForm button,
+#trabajoForm input,
+#trabajoForm button {
+  height: 2.5rem;            /* 40px de alto */
+  line-height: 1.2;          /* texto centrado verticalmente */
+}
+
+#turnoForm input,
+#trabajoForm input {
+  padding: 0 0.75rem;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;      /* separación entre campos */
+  border: 1px solid #CBD5E0; /* gris claro */
+}
+
+#turnoForm button,
+#trabajoForm button {
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+}
+/* Separación entre lista dinámica y formulario */
+#turnosList,
+#trabajosList {
+  margin-bottom: 1rem; /* 16px */
+}
+/* Lluvia de emojis */
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.5;
+  }
+}
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.5;
+  }
+}
+/* Para que el fondo detrás del modal se vea difuminado */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+}
+/* Tarjeta de Pablo seleccionada: azul más intenso */
+.user-card.selected[data-user="pablo"] {
+  background-color: #bfdbfe; /* equivale a bg-blue-200 */
+}
+
+/* Tarjeta de Paula seleccionada: rosa más intenso */
+.user-card.selected[data-user="paula"] {
+  background-color: #f9a8d4; /* equivale a bg-pink-200 */
+}
+/* Ajustes específicos para los Recordatorios */
+#recordatoriosList {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.125rem;       /* 18px */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+#recordatoriosList li span {
+  font-family: 'Poppins', monospace;  /* números monoespaciados */
+  font-weight: 400;
+}
+
+/* Opcional: más contraste en los botones */
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+/* Asegura que las horas queden siempre encima */
+#dayHourList .w-12 {
+  position: relative; 
+  z-index: 10;
+}
+
+/* Bloques de evento tras las horas */
+.event-block {
+  z-index: 5;
+}
+.event-item {
+  font-size: 0.7rem;
+  margin-top: 2px;
+  padding: 2px 4px;
+  border-radius: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.more-events {
+  font-size: 0.65rem;
+  text-align: center;
+  margin-top: 4px;
+  color: #4B5563; /* Tailwind gray-600 */
+  cursor: pointer;
+}
+#dayHourList {
+  position: relative;
+}
+
+.event-block {
+  position: absolute;
+
+  color: #1F2937;
+  font-size: 0.75rem;
+  overflow: hidden;
+  z-index: 10;
+}
