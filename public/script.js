@@ -315,23 +315,35 @@ newTrabajoBtn.addEventListener('click', () => {
       const cell = document.createElement("div");
       cell.className = "border rounded-md p-2 calendar-day relative";
   
-      // calculamos num y estilo...
-      let num, cellMonth = m;
+      let num, cellMonth = m, cellYear = y;
       if (i < dayIndex) {
+        // días del mes anterior
         num = daysPrev - dayIndex + 1 + i;
         cell.classList.add("bg-white","bg-opacity-50","text-gray-400");
+        cellMonth = m - 1;
+        if (cellMonth < 0) {
+          cellMonth = 11;
+          cellYear = y - 1;
+        }
       } else if (i >= dayIndex + daysInMonth) {
+        // días del mes siguiente
         num = i - (dayIndex + daysInMonth) + 1;
         cell.classList.add("bg-white","bg-opacity-50","text-gray-400");
+        cellMonth = m + 1;
+        if (cellMonth > 11) {
+          cellMonth = 0;
+          cellYear = y + 1;
+        }
       } else {
+        // días del mes actual
         num = i - dayIndex + 1;
         cell.classList.add("bg-gray-200","bg-opacity-30");
       }
   
-      // asignamos data-date
+      // asignamos data-date con año y mes corregidos
       const mm = String(cellMonth + 1).padStart(2, "0");
       const dd = String(num).padStart(2, "0");
-      cell.dataset.date = `${y}-${mm}-${dd}`;
+      cell.dataset.date = `${cellYear}-${mm}-${dd}`;
   
       // 1) Insertar número
       const divNum = document.createElement("div");
