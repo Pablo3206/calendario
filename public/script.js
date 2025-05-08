@@ -1001,6 +1001,10 @@ if (userPabloBtnModal) {
 if (userPaulaBtnModal) {
   userPaulaBtnModal.addEventListener("click", () => saveEventForUser("paula"));
 }
+const userBothBtnModal = document.getElementById("userBothBtnModal");
+if (userBothBtnModal) {
+  userBothBtnModal.addEventListener("click", () => saveEventForUser("both"));
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Funciones para editar y eliminar
@@ -1105,9 +1109,12 @@ async function fetchEventos() {
         classes = 'bg-green-100 text-green-800';
       } else if (ev.usuario === 'friki') {
         classes = 'bg-yellow-100 text-yellow-800';
+      } else if (ev.usuario === 'both') {
+        classes = 'bg-red-100 text-red-800';
       } else {
         classes = 'bg-gray-100 text-gray-800';
       }
+      
       createEventOnCalendar(
         ev.fecha_inicio.split('T')[0],
         ev.titulo,
