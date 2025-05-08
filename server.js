@@ -81,22 +81,22 @@ app.put('/api/tipos/:id', async (req, res) => {
 // RUTAS PARA EVENTOS
 //
 app.get('/api/eventos', async (_, res) => {
-    const { rows } = await pool.query(
-      `SELECT
-         id,
-         titulo,
-         descripcion,
-         ubicacion,
-        to_char(fecha_inicio, 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_inicio,
-        to_char(fecha_fin,    'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_fin,
-
-         usuario,
-         tipo_id
-       FROM eventos
-       ORDER BY fecha_inicio`
-    );
+    const { rows } = await pool.query(`
+      SELECT
+        id,
+        titulo,
+        descripcion,
+        ubicacion,
+        to_char(fecha_inicio AT TIME ZONE 'Europe/Madrid', 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_inicio,
+        to_char(fecha_fin    AT TIME ZONE 'Europe/Madrid', 'YYYY-MM-DD"T"HH24:MI:SS') AS fecha_fin,
+        usuario,
+        tipo_id
+      FROM eventos
+      ORDER BY fecha_inicio
+    `);
     res.json(rows);
   });
+  
   
   
 
