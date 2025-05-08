@@ -828,10 +828,15 @@ userFrikiBtnModal.addEventListener("click", () => {
 
 // 3) Función para refrescar la vista tras un POST
 async function refreshEvents() {
-  events.length = 0; // limpiamos array de eventos para evitar duplicados
+  // 1) Limpiar array y DOM
+  events.length = 0;
   generateCalendar(currentDate);
+  // 2) Volver a pintar los eventos filtrados
   await fetchEventos();
+  // 3) Reenganchar los handlers de edición/detalle
+  attachDayEventHandlers();
 }
+
 
 // 4) Lista de TURNOS
 async function showTurnosList() {
