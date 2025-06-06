@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Flipi Board</title>
+  <style>
+    /* Estilos básicos para centrar el canvas y darle fondo */
+    body {
+      margin: 0;
+      background: #87CEEB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      background: #87CEEB;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Cargar imágenes
+    const imgObstacle = new Image();
+    imgObstacle.src = "imagenes/foto1.jpeg";  // Obstáculo
+
+    const imgBird = new Image();
+    imgBird.src = "imagenes/foto2.png";       // Pajarito
+
+    const imgFinal = new Image();
+    imgFinal.src = "imagenes/foto3.jpeg";     // Imagen final
+
+    // Cargar y configurar la canción de fondo
+
+    // Se intentará reproducir en el primer click (requerido en algunos navegadores)
+
+    // Variables del juego
+    let bird = {
+      x: 100,
+      y: canvas.height / 2,
+      width: 0,  // Se asignará al cargar la imagen con escala
+      height: 0,
+      velocity: 0
+    };
+
+    const gravity = 0.5;
+    const jumpStrength = -10;
+    const birdScale = 0.5; // Escala para reducir el tamaño del pajarito
+
+    let obstacles = [];
+    const obstacleSpeed = 5;
+    let spawnTimer = 0;
+    const spawnInterval = 150; // Intervalo para separar los obstáculos
+
+    let obstaclesPassed = 0;
+    let gameOver = false;
+    let finalStage = false;   // Se activa cuando se pasan 10 obstáculos
+    let finalReached = false; // Se activa cuando el pajarito toca la imagen final
+    let finalGoal = null;     // Objeto de la imagen final
+
+    // Función para detectar colisiones (rectángulo a rectángulo)
+    function checkCollision(rect1, rect2) {
+      return (
+        rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.y + rect1.height > rect2.y
+      );
+    }
+
+    // Escuchar clicks para que el pajarito "salte" y se inicie la música
+    canvas.addEventListener("click", function() {
+      if (!gameOver) {
+        bird.velocity = jumpStrength;
+      }
+    });
+
+    // Actualizar la lógica del juego
+    function update() {
+      if (gameOver) return;
+
+      // Actualizar la posición del pajarito con gravedad
+      bird.velocity += gravity;
+      bird.y += bird.velocity;
+
+      // Evitar que el pajarito se salga del canvas
+      if (bird.y < 0) {
+        bird.y = 0;
+        bird.velocity = 0;
+      } else if (bird.y + bird.height > canvas.height) {
+        bird.y = canvas.height - bird.height;
+        bird.velocity = 0;
+      }
+
+      // Si aún no estamos en la etapa final, generar obstáculos
+      if (!finalStage) {
+        spawnTimer++;
+        if (spawnTimer > spawnInterval) {
+          spawnTimer = 0;
+          // Generar posición Y aleatoria: top, medio o abajo
+          const posOption = Math.floor(Math.random() * 3);
+          let obstacleY;
+          if (posOption === 0) {
+            // Obstáculo en la parte superior
+            obstacleY = Math.random() * (canvas.height * 0.33 - imgObstacle.height);
+          } else if (posOption === 1) {
+            // Obstáculo en la parte media
+            obstacleY = canvas.height * 0.33 + Math.random() * (canvas.height * 0.34 - imgObstacle.height);
+          } else {
+            // Obstáculo en la parte inferior
+            obstacleY = canvas.height * 0.67 + Math.random() * (canvas.height * 0.33 - imgObstacle.height);
+          }
+          obstacles.push({
+            x: canvas.width,
+            y: obstacleY,
+            width: imgObstacle.width,
+            height: imgObstacle.height,
+            passed: false
+          });
+        }
+      }
+
+      // Actualizar posición de los obstáculos
+      obstacles.forEach(obstacle => {
+        obstacle.x -= obstacleSpeed;
+      });
+
+      // Eliminar obstáculos fuera del canvas y contar los que pasan al pajarito
+      obstacles = obstacles.filter(obstacle => {
+        if (obstacle.x + obstacle.width < 0) {
+          return false;
+        }
+        if (!obstacle.passed && obstacle.x + obstacle.width < bird.x) {
+          obstacle.passed = true;
+          obstaclesPassed++;
+          // Al pasar 10 obstáculos, activar la etapa final
+          if (obstaclesPassed >= 10 && !finalStage) {
+            finalStage = true;
+            // Crear el objeto final en la parte derecha
+            finalGoal = {
+              x: canvas.width,
+              y: canvas.height / 2 - imgFinal.height / 2,
+              width: imgFinal.width,
+              height: imgFinal.height
+            };
+          }
+        }
+        return true;
+      });
+
+      // Si estamos en la etapa final, mover la imagen final hacia la izquierda
+      if (finalStage && finalGoal) {
+        finalGoal.x -= obstacleSpeed;
+        // Comprobar colisión entre el pajarito y la imagen final
+        if (checkCollision(bird, finalGoal)) {
+          finalReached = true;
+          gameOver = true;
+        }
+      }
+
+      // Mientras no estemos en la etapa final, comprobar colisión con obstáculos
+      if (!finalStage) {
+        obstacles.forEach(obstacle => {
+          if (checkCollision(bird, obstacle)) {
+            gameOver = true;
+          }
+        });
+      }
+    }
+
+    // Dibujar los elementos en el canvas
+    function draw() {
+      // Limpiar el canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Si se alcanzó la meta final, dibujar la imagen final a tamaño completo
+      // y superponer el pajarito en el centro de la imagen final
+      if (finalReached) {
+        ctx.drawImage(imgFinal, 0, 0, canvas.width, canvas.height);
+        const birdX = canvas.width / 2 - bird.width / 2;
+        const birdY = canvas.height / 2 - bird.height / 2;
+        ctx.drawImage(imgBird, birdX, birdY, bird.width, bird.height);
+        return;
+      }
+
+      // Dibujar fondo
+      ctx.fillStyle = "#87CEEB";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Dibujar obstáculos
+      obstacles.forEach(obstacle => {
+        ctx.drawImage(imgObstacle, obstacle.x, obstacle.y);
+      });
+
+      // Si estamos en la etapa final, dibujar la imagen final en su posición actual
+      if (finalStage && finalGoal) {
+        ctx.drawImage(imgFinal, finalGoal.x, finalGoal.y);
+      }
+
+      // Dibujar el pajarito
+      ctx.drawImage(imgBird, bird.x, bird.y, bird.width, bird.height);
+    }
+
+    // Bucle principal del juego
+    function gameLoop() {
+      update();
+      draw();
+      if (!gameOver) {
+        requestAnimationFrame(gameLoop);
+      } else {
+        // Se dibuja una última vez el final si se alcanzó la meta
+        draw();
+      }
+    }
+
+    // Iniciar el juego una vez cargada la imagen del pajarito
+    imgBird.onload = function() {
+  bird.width = 130;
+  bird.height = 130;
+  if (imgObstacle.complete && imgFinal.complete) {
+    gameLoop();
+  }
+};
+
+
+    // Eventos onload para obstáculo e imagen final (opcional)
+    imgObstacle.onload = function() { /* ... */ };
+    imgFinal.onload = function() { /* ... */ };
+  </script>
+</body>
+</html>

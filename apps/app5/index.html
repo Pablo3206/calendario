@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos vemos en...</title>
+    <link rel="icon" type="image/png" href="./imagenes/Sujeto.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: contain;
+            background-repeat: repeat;
+            background-position: center;
+            background-color: black;
+        }
+        .contenedor {
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 5px black;
+        }
+        .botones {
+            margin-top: 20px;
+        }
+        button {
+            font-size: 1.8rem;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .si {
+            background-color: green;
+            color: white;
+        }
+        .no {
+            background-color: red;
+            color: white;
+        }
+        .boton-secundario {
+            background-color: blue;
+            color: white;
+            font-size: 1.2rem; /* Tamaño más pequeño */
+            padding: 8px 15px;
+        }
+        /* Nueva clase para el botón "Nosotros" en rosa */
+        .boton-nosotros {
+            background-color: #FF69B4;
+            color: white;
+            font-size: 1.2rem;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .si:active, .no:active, .boton-secundario:active, .boton-nosotros:active {
+            transform: scale(0.9);
+        }
+        .oculto {
+            display: none;
+        }
+        video {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+        #pantalla-video {
+            position: relative;
+        }
+        #boton-volver-contador {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .contador {
+            text-align: center;
+            color: #007b83;
+            text-shadow: 0 0 5px #005f66, 0 0 5px #005f66, 0 0 4px #005f66;
+            font-size: 4rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .contador h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b0e0e6;
+            text-shadow: 0 0 6px #007b83;
+        }
+        .tiempo {
+            font-size: 2.5rem; /* Más pequeño */
+            color: rgb(28, 84, 158); /* Color unificado */
+            text-shadow: 1px 1px 3px black;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body id="pagina">
+
+    <!-- Pantalla de inicio -->
+    <div id="pantalla-inicio" class="contenedor">
+        <h1>PEIXU?</h1>
+        <div class="botones">
+            <button class="si" id="boton-si">Sí</button>
+            <button class="no" onclick="irAlContador()">No</button>
+            <button class="boton-secundario" onclick="irAlFlipi()">Juego</button>
+            <!-- Botón "Nosotros" con fondo rosa -->
+            <button class="boton-nosotros" onclick="irANosotros()">Nosotros</button>
+        </div>
+    </div>
+
+    <!-- Contadores -->
+    <div id="pantalla-contador" class="oculto">
+        <!-- Contador principal -->
+        <div class="contador">
+            <h1>Tiempo restante hasta el 13 de abril a las 10:00</h1>
+            <div class="tiempo" id="tiempo-principal">Cargando...</div>
+            <button id="cambiar-fondo" class="boton-secundario" onclick="cambiarFondoAleatorio()">Cambiar Fondo</button>
+        </div>
+
+        <!-- Contadores secundarios -->
+        <div class="contador">
+            <h1 style="color: #90EE90;">PAELLAS - 16 de abril a las 11:00</h1>
+            <div class="tiempo" id="tiempo-paellas">Cargando...</div>
+
+            <h1 style="color: #FF69B4;">Comer buen chuchi - 17 de abril a las 20:30</h1>
+            <div class="tiempo" id="tiempo-chuchi">Cargando...</div>
+
+            <h1 style="color: #FFD700;">Montar a caballo - 19 de abril a las 10:00</h1>
+            <div class="tiempo" id="tiempo-caballo">Cargando...</div>
+        </div>
+    </div>
+
+    <!-- Video a pantalla completa -->
+    <div id="pantalla-video" class="oculto">
+        <video id="video" autoplay controls muted>
+            <source src="imagenes/video1.mp4" type="video/mp4">
+            Tu navegador no soporta el video.
+        </video>
+        <button id="boton-volver-contador" onclick="irAlContador()">Ir al Contador</button>
+    </div>
+    
+
+    <script>
+        let contadorClicks = 0;
+
+        // Establecer fondo de la pantalla principal
+        document.body.style.backgroundImage = "url('imagenes/fondo.jpg')";
+
+        function irAlContador() {
+            document.getElementById("pantalla-inicio").classList.add("oculto");
+            document.getElementById("pantalla-video").classList.add("oculto");
+            document.getElementById("pantalla-contador").classList.remove("oculto");
+
+            // Cambia el fondo a una imagen aleatoria
+            cambiarFondoAleatorio();
+
+            // Inicia el contador
+            actualizarContador();
+            setInterval(actualizarContador, 1000);
+
+            // Cambia el fondo cada 3 horas
+            setInterval(cambiarFondoAleatorio, 3 * 60 * 60 * 1000);
+        }
+
+        function irAlVideo() {
+            document.getElementById("pantalla-inicio").classList.add("oculto");
+            document.getElementById("pantalla-contador").classList.add("oculto");
+            document.getElementById("pantalla-video").classList.remove("oculto");
+            document.getElementById("video").play();
+        }
+
+        function irAlFlipi() {
+            window.location.href = "flipi.html";
+        }
+
+        function moverBotonSi() {
+            if (contadorClicks >= 3) {
+                irAlVideo();
+                return;
+            }
+
+            contadorClicks++;
+
+            let botonSi = document.getElementById("boton-si");
+            let maxX = window.innerWidth - botonSi.offsetWidth - 20;
+            let maxY = window.innerHeight - botonSi.offsetHeight - 20;
+
+            let nuevaX = Math.floor(Math.random() * maxX);
+            let nuevaY = Math.floor(Math.random() * maxY);
+
+            botonSi.style.position = "absolute";
+            botonSi.style.left = nuevaX + "px";
+            botonSi.style.top = nuevaY + "px";
+        }
+
+        document.getElementById("boton-si").addEventListener("click", moverBotonSi);
+
+        function actualizarContador() {
+            actualizarUnContador("tiempo-principal", new Date("2025-04-13T10:00:00").getTime());
+            actualizarUnContador("tiempo-caballo", new Date("2025-04-19T10:00:00").getTime());
+            actualizarUnContador("tiempo-chuchi", new Date("2025-04-17T20:30:00").getTime());
+            actualizarUnContador("tiempo-paellas", new Date("2025-04-16T11:00:00").getTime());
+        }
+
+        function actualizarUnContador(idElemento, fechaObjetivo) {
+            const ahora = new Date().getTime();
+            const diferencia = fechaObjetivo - ahora;
+            const elemento = document.getElementById(idElemento);
+
+            if (!elemento) return;
+
+            if (diferencia <= 0) {
+                elemento.innerText = "¡La fecha ha llegado!";
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            elemento.innerText = `${dias} días, ${horas}h ${minutos}min ${segundos}s`;
+        }
+
+        function cambiarFondoAleatorio() {
+            const numeroAleatorio = Math.floor(Math.random() * 32) + 1;
+            document.getElementById("pagina").style.backgroundImage = `url('imagenes/${numeroAleatorio}.jpg')`;
+        }
+        
+        function irANosotros() {
+            window.location.href = "nosotros.html";
+        }
+    </script>
+
+</body>
+</html>

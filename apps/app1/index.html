@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos vemos en...</title>
+    <link rel="icon" type="image/png" href="./imagenes/Sujeto.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+        }
+        .contador {
+            text-align: center;
+            color: #007b83;
+            text-shadow: 0 0 5px #005f66, 0 0 5px #005f66, 0 0 4px #005f66;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        .contador h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b0e0e6;
+            text-shadow: 0 0 0px #007b83, 0 0 6px #007b83;
+        }
+        .contador .tiempo {
+            font-size: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="contador">
+        <h1>Tiempo restante hasta el 7 de marzo a las 19:00</h1>
+        <div class="tiempo" id="tiempo">Cargando...</div>
+    </div>
+
+    <script>
+
+        function actualizarContador() {
+            const fechaObjetivo = new Date("2025-03-07T19:00:00").getTime();
+            const ahora = new Date().getTime();
+            const diferencia = fechaObjetivo - ahora;
+
+            if (diferencia <= 0) {
+                document.getElementById("tiempo").innerText = "¡La fecha ha llegado!";
+                clearInterval(intervalo);
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById("tiempo").innerText =
+                `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+        }
+
+        function cambiarFondoAleatorio() {
+            const numeroAleatorio = Math.floor(Math.random() * 27) + 1; // Genera un número entre 1 y 15
+            document.body.style.backgroundImage = `url('imagenes/${numeroAleatorio}.jpg')`;
+        }
+
+        const intervalo = setInterval(actualizarContador, 1000);
+        actualizarContador();
+
+        cambiarFondoAleatorio(); // Cambia el fondo al cargar la página
+        setInterval(cambiarFondoAleatorio, 3 * 60 * 60 * 1000); // Cambia el fondo cada 3 horas
+    </script>
+</body>
+</html>

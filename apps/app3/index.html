@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador regresivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .contador {
+            text-align: center;
+            color: #007b83;
+            text-shadow: 0 0 5px #005f66, 0 0 5px #005f66, 0 0 4px #005f66;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+        .contador h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b0e0e6;
+            text-shadow: 0 0 0px #007b83, 0 0 6px #007b83;
+        }
+
+        .contador .tiempo {
+            font-size: 4rem;
+        }
+
+        .fefi {
+            position: absolute;
+            width: 60px; /* Imagen más pequeña */
+            height: auto;
+            z-index: 1000;
+            display: none;
+            cursor: pointer; /* Cambia el cursor al pasar por la imagen */
+        }
+
+        .boton-rojo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Oculto por defecto */
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+    <div class="contador">
+        <h1>Tiempo restante hasta el 31 de enero a las 21:00</h1>
+        <div class="tiempo" id="tiempo">Cargando...</div>
+    </div>
+
+    <video id="fondoVideo" autoplay muted loop style="display: none;"></video>
+    <img id="fefi" src="./IMAGENES/fefi.png" class="fefi" alt="Fefi">
+    <button id="botonRojo" class="boton-rojo">¿Quieres ver una cosa?</button>
+
+    <script>
+        function actualizarContador() {
+            const fechaObjetivo = new Date("2025-01-31T21:00:00").getTime();
+            const ahora = new Date().getTime();
+            const diferencia = fechaObjetivo - ahora;
+
+            if (diferencia <= 0) {
+                document.getElementById("tiempo").innerText = "¡La fecha ha llegado!";
+                clearInterval(intervalo);
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById("tiempo").innerText =
+                `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+        }
+
+        function cambiarFondoAleatorio() {
+            const numeroAleatorio = Math.floor(Math.random() * 20) + 1;
+            const archivo = `./IMAGENES/${numeroAleatorio}`;
+            const fondoVideo = document.getElementById("fondoVideo");
+
+            fetch(`${archivo}.mp4`, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        fondoVideo.src = `${archivo}.mp4`;
+                        fondoVideo.style.display = "block";
+                        document.body.style.backgroundImage = "none";
+                        fondoVideo.play().catch(console.error);
+                    } else {
+                        fondoVideo.style.display = "none";
+                        document.body.style.backgroundImage = `url('${archivo}.jpg')`;
+                    }
+                })
+                .catch(() => {
+                    fondoVideo.style.display = "none";
+                    document.body.style.backgroundImage = `url('${archivo}.jpg')`;
+                });
+        }
+
+        function mostrarFefiRebotando() {
+            const probabilidad = Math.random();
+            if (probabilidad <= 0.3) {
+                const fefi = document.getElementById("fefi");
+                fefi.style.display = "block";
+
+                let posX = Math.random() * (window.innerWidth - 100);
+                let posY = Math.random() * (window.innerHeight - 100);
+                let velocidadX = (Math.random() * 13) - 3;
+                let velocidadY = (Math.random() * 13) - 3;
+                let rebotes = 0;
+
+                fefi.style.left = `${posX}px`;
+                fefi.style.top = `${posY}px`;
+
+                fefi.onclick = () => {
+                    alert("¿Unos vinitos o qué?");
+                };
+
+                const intervaloFefi = setInterval(() => {
+                    posX += velocidadX;
+                    posY += velocidadY;
+
+                    if (posX <= 0 || posX >= window.innerWidth - fefi.offsetWidth) {
+                        velocidadX *= -1;
+                        rebotes++;
+                    }
+                    if (posY <= 0 || posY >= window.innerHeight - fefi.offsetHeight) {
+                        velocidadY *= -1;
+                        rebotes++;
+                    }
+
+                    fefi.style.left = `${posX}px`;
+                    fefi.style.top = `${posY}px`;
+
+                    if (rebotes >= 4) {
+                        clearInterval(intervaloFefi);
+                        fefi.style.display = "none";
+                    }
+                }, 20);
+            }
+        }
+
+        function mostrarBotonRojo() {
+            const probabilidad = Math.random();
+            const botonRojo = document.getElementById("botonRojo");
+
+            if (probabilidad <= 0.2) {
+                botonRojo.style.display = "block";
+                botonRojo.onclick = () => {
+                    const videoAleatorio = Math.random() > 0.5 ? "./IMAGENES/21.mp4" : "./IMAGENES/22.mp4";
+                    const fondoVideo = document.getElementById("fondoVideo");
+
+                    fondoVideo.src = videoAleatorio;
+                    fondoVideo.style.display = "block";
+                    document.body.style.backgroundImage = "none";
+                    fondoVideo.play();
+                };
+            }
+        }
+
+        const intervalo = setInterval(actualizarContador, 1000);
+        actualizarContador();
+        cambiarFondoAleatorio();
+        mostrarFefiRebotando();
+        mostrarBotonRojo();
+    </script>
+</body>
+</html>

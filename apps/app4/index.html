@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador regresivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .botones-inicio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .boton {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .boton-verde {
+            background-color: green;
+        }
+
+        .boton-azul {
+            background-color: blue;
+        }
+
+        .contador {
+            text-align: center;
+            color: #007b83;
+            text-shadow: 0 0 5px #005f66, 0 0 5px #005f66, 0 0 4px #005f66;
+            font-size: 4rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .contador h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b0e0e6;
+            text-shadow: 0 0 0px #007b83, 0 0 6px #007b83;
+        }
+
+        .contador .tiempo {
+            font-size: 4rem;
+        }
+
+        .fefi {
+            position: absolute;
+            width: 60px;
+            height: auto;
+            z-index: 1000;
+            display: none;
+            cursor: pointer;
+        }
+
+        .boton-rojo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+            z-index: 2000;
+        }
+
+        .reglas {
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .reglas h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .reglas ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .reglas li {
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .boton-empezar {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div class="botones-inicio" id="botonesInicio">
+        <button class="boton boton-verde" id="botonJugar">Jugar</button>
+        <button class="boton boton-azul" id="botonCuentaAtras">Cuenta Atrás</button>
+    </div>
+
+    <div class="contador" id="contador">
+        <h1>Tiempo restante hasta el 31 de enero a las 21:00</h1>
+        <div class="tiempo" id="tiempo">Cargando...</div>
+    </div>
+
+    <video id="fondoVideo" autoplay muted loop style="display: none;"></video>
+    <img id="fefi" src="./IMAGENES/fefi.png" class="fefi" alt="Fefi">
+    <button id="botonRojo" class="boton-rojo">¿Quieres ver una cosa?</button>
+
+    <script>
+        const botonesInicio = document.getElementById('botonesInicio');
+        const botonJugar = document.getElementById('botonJugar');
+        const botonCuentaAtras = document.getElementById('botonCuentaAtras');
+        const contadorDiv = document.getElementById('contador');
+
+        botonJugar.addEventListener('click', () => {
+            document.body.innerHTML = `
+    <div class="reglas">
+        <h2>Reglas del Juego</h2>
+        <p>Vas a jugar al buscando a Wally pero en vez de a Wally tendrás que buscar Paulas. Con cada Paula que encuentres, obtendrás una mini pista sobre algo, que va de fácil a difícil.</p>
+        <h3>Paulas a encontrar:</h3>
+        <ul>
+            <li>Paula Gitana</li>
+            <li>Paula Borracha</li>
+            <li>Paula Durmiente</li>
+        </ul>
+        <p>Tienes 20 segundos por foto. Puedes intentarlo todas las veces que quieras pero esta pista sólo estará 5 minutos disponible.</p>
+        <p>Una vez hayas visto una Paula, me tendrás que decir dónde la has encontrado y yo te daré la pista con fotos.</p>
+        <button class="boton-empezar" id="botonEmpezarJuego">Empezar a Jugar</button>
+        <div class="imagenes-paulas" style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+            <img src="./IMAGENES/pgg.png" alt="Paula Gitana" style="width: 100px; height: auto; border-radius: 10px;">
+            <img src="./IMAGENES/pbb.png" alt="Paula Borracha" style="width: 100px; height: auto; border-radius: 10px;">
+            <img src="./IMAGENES/pdd.png" alt="Paula Durmiente" style="width: 200px; height: 30; border-radius: 20px;">
+        </div>
+    </div>
+`;
+
+
+            const botonEmpezarJuego = document.getElementById('botonEmpezarJuego');
+            botonEmpezarJuego.addEventListener('click', () => {
+                iniciarJuego();
+            });
+        });
+
+        function iniciarJuego() {
+            const imagenes = ['./IMAGENES/PG.png', './IMAGENES/PB.png', './IMAGENES/PD.png'];
+            let indiceImagen = 0;
+
+            // Mostrar el primer estado del juego con la imagen inicial
+            mostrarImagen(imagenes[indiceImagen]);
+
+            const intervaloJuego = setInterval(() => {
+                indiceImagen++;
+                if (indiceImagen < imagenes.length) {
+                    mostrarImagen(imagenes[indiceImagen]);
+                } else {
+
+                    clearInterval(intervaloJuego);
+                    volverAlContador(); // Regresar al contador al final del juego
+                }
+            }, 20000); // Cambiar imagen cada 1 segundo
+        }
+
+        function mostrarImagen(src) {
+            document.body.innerHTML = `
+                <div class="juego">
+                    <img src="${src}" alt="Paula" style="width: 100%; height: auto;">
+                </div>
+            `;
+        }
+
+        function volverAlContador() {
+            document.body.innerHTML = `
+                <div class="contador" id="contador">
+                    <h1>Tiempo restante hasta el 31 de enero a las 21:00</h1>
+                    <div class="tiempo" id="tiempo">Cargando...</div>
+                </div>
+                <video id="fondoVideo" autoplay muted loop style="display: none;"></video>
+                <img id="fefi" src="./IMAGENES/fefi.png" class="fefi" alt="Fefi">
+                <button id="botonRojo" class="boton-rojo">¿Quieres ver una cosa?</button>
+            `;
+
+            const botonRojo = document.getElementById("botonRojo");
+            botonRojo.addEventListener("click", () => {
+                cambiarFondoAleatorio();
+                mostrarFefiRebotando();
+            });
+
+            iniciarCuentaAtras(); // Reiniciar el temporizador
+            cambiarFondoAleatorio(); // Reanudar el cambio de fondo aleatorio
+            activarBotonRojo(); // Reactivar el botón rojo después de 5 segundos
+        }
+
+        botonCuentaAtras.addEventListener('click', () => {
+            botonesInicio.style.display = 'none';
+            contadorDiv.style.display = 'block';
+            iniciarCuentaAtras();
+        });
+
+        function iniciarCuentaAtras() {
+            function actualizarContador() {
+                const fechaObjetivo = new Date("2025-01-31T21:00:00").getTime();
+                const ahora = new Date().getTime();
+                const diferencia = fechaObjetivo - ahora;
+
+                if (diferencia <= 0) {
+                    document.getElementById("tiempo").innerText = "¡La fecha ha llegado!";
+                    clearInterval(intervalo);
+                    return;
+                }
+
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+                document.getElementById("tiempo").innerText =
+                    `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+            }
+
+            const intervalo = setInterval(actualizarContador, 1000);
+            actualizarContador();
+        }
+
+        function cambiarFondoAleatorio() {
+            const numeroAleatorio = Math.floor(Math.random() * 20) + 1;
+            const archivo = `./IMAGENES/${numeroAleatorio}`;
+            const fondoVideo = document.getElementById("fondoVideo");
+
+            fetch(`${archivo}.mp4`, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        fondoVideo.src = `${archivo}.mp4`;
+                        fondoVideo.style.display = "block";
+                        document.body.style.backgroundImage = "none";
+                        fondoVideo.play().catch(console.error);
+                    } else {
+                        fondoVideo.style.display = "none";
+                        document.body.style.backgroundImage = `url('${archivo}.jpg')`;
+                    }
+                })
+                .catch(() => {
+                    fondoVideo.style.display = "none";
+                    document.body.style.backgroundImage = `url('${archivo}.jpg')`;
+                });
+        }
+
+        function mostrarFefiRebotando() {
+            const probabilidad = Math.random();
+            if (probabilidad <= 0.3) {
+                const fefi = document.getElementById("fefi");
+                fefi.style.display = "block";
+
+                let posX = Math.random() * (window.innerWidth - 100);
+                let posY = Math.random() * (window.innerHeight - 100);
+                let velocidadX = (Math.random() * 13) - 3;
+                let velocidadY = (Math.random() * 13) - 3;
+                let rebotes = 0;
+
+                fefi.style.left = `${posX}px`;
+                fefi.style.top = `${posY}px`;
+
+                fefi.onclick = () => {
+                    alert("¿Unos vinitos o qué?");
+                };
+
+                const intervaloFefi = setInterval(() => {
+                    posX += velocidadX;
+                    posY += velocidadY;
+
+                    if (posX <= 0 || posX >= window.innerWidth - fefi.offsetWidth) {
+                        velocidadX *= -1;
+                        rebotes++;
+                    }
+                    if (posY <= 0 || posY >= window.innerHeight - fefi.offsetHeight) {
+                        velocidadY *= -1;
+                        rebotes++;
+                    }
+
+                    if (rebotes >= 5) {
+                        clearInterval(intervaloFefi);
+                        fefi.style.display = "none";
+                    }
+
+                    fefi.style.left = `${posX}px`;
+                    fefi.style.top = `${posY}px`;
+                }, 50);
+            }
+        }
+
+        const botonRojo = document.getElementById("botonRojo");
+        botonRojo.addEventListener("click", () => {
+            cambiarFondoAleatorio();
+            //mostrarFefiRebotando();
+        });
+
+        function activarBotonRojo() {
+            setTimeout(() => {
+                botonRojo.style.display = "block";
+            }, 5000);
+        }
+
+        cambiarFondoAleatorio();
+        //activarBotonRojo();
+    </script>
+</body>
+</html>
