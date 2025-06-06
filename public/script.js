@@ -826,6 +826,14 @@ crearEventoModal.classList.remove("hidden");
       historiaModal.classList.add("hidden");
     });
   }
+// Cerrar el modal de Historia al hacer clic fuera del contenido
+if (historiaModal) {
+  historiaModal.addEventListener("click", (e) => {
+    if (e.target === historiaModal) {
+      historiaModal.classList.add("hidden");
+    }
+  });
+}
   
 
 // ─────────────────────────────────────────────────────────────────────────────
