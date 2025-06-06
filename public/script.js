@@ -812,7 +812,26 @@ crearEventoModal.classList.remove("hidden");
 
   });
 
+  const mensajeBtns = document.querySelectorAll('#notificacionesModal button[data-msg]');
 
+  mensajeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const msg = encodeURIComponent(btn.dataset.msg);
+      let numero = '';
+  
+      if (selectedUser === 'pablo') {
+        numero = '34674859623';
+      } else if (selectedUser === 'paula') {
+        numero = '34680493008';
+      } else {
+        alert("Selecciona primero a Pablo o a Paula ❤️");
+        return;
+      }
+  
+      window.open(`https://wa.me/${numero}?text=${msg}`, '_blank');
+    });
+  });
+  
 
   const historiaBtn = document.getElementById("historiaBtn");
   const historiaModal = document.getElementById("historiaModal");
