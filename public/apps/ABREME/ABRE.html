@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIMATEEEE</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #98FB98; /* Verde claro */
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        .carretera {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #444;
+            margin-top: 50px;
+        }
+
+        .lineas {
+            position: absolute;
+            width: 10px;
+            height: 50px;
+            background-color: #fff;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            animation: moverLineas 2s linear infinite;
+        }
+
+        @keyframes moverLineas {
+            0% { left: 100%; }
+            100% { left: -10%; }
+        }
+
+        .arbol, .clavel, .rosa {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 100px;
+        }
+
+        .arbol {
+            background: url('ARBOL.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        .clavel {
+            background: url('CLAVEL.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        .rosa {
+            background: url('ROSA.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        .decoraciones {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .coche {
+            position: absolute;
+            bottom: 150px;
+            left: 10px;
+            width: 150px;
+            transition: left 2s linear;
+        }
+
+        .parabrisas {
+            position: absolute;
+            top: 25px;
+            left: 60px;
+            width: 40px;
+            transition: left 2s linear;
+        }
+
+        .paula {
+            position: absolute;
+            bottom: 20px;
+            right: 10px;
+            width: 50px;
+            display: none;
+            transition: right 2s linear;
+        }
+
+        .boton {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .boton-interactuar, .boton-interactuar-nuevo {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            background-color: red;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .boton-bajas {
+            display: none;
+            position: absolute;
+            padding: 15px 30px;
+            background-color: green;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .boton-vamos {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            background-color: green;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .bocadillo {
+            display: none;
+            position: absolute;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <button class="boton" onclick="activar()">Activar</button>
+    <div class="carretera">
+        <img src="NOABRIR/COCHE.png" alt="Coche" class="coche" id="coche">
+        <img src="NOABRIR/PABLO.png" alt="Pablo" class="parabrisas" id="parabrisas">
+        <img src="NOABRIR/PAULA1.png" alt="Paula" class="paula" id="paula">
+        <div class="bocadillo" id="bocadillo">¡Bajaaaaa!</div>
+        <div class="bocadillo" id="bocadilloPablo">TARDONA</div>
+        <div class="bocadillo" id="bocadilloPaula">QUEJICA</div>
+    </div>
+    <button class="boton-interactuar" id="botonInteractuar" onclick="mostrarBocadillo()">Interactúa</button>
+    <button class="boton-bajas" id="botonBajas" onclick="moverPaula()">¿Bajas?</button>
+    <button class="boton-interactuar-nuevo" id="botonInteractuarNuevo" onclick="mostrarBocadillos()">Interactúa de nuevo</button>
+    <button class="boton-vamos" id="botonVamos" onclick="volverInicio()">Vamos</button>
+
+    <!-- Ventana emergente para el video -->
+    <div id="videoModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+        <div style="position:relative; width:90%; max-width:560px;">
+            <iframe id="videoFrame" width="560" height="315" src="https://www.youtube.com/embed/zqmf-BoJBPY?si=6GTLJioZXCznXbK1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <button style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; border-radius:5px; padding:5px 10px; cursor:pointer;" onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        function activar() {
+            const coche = document.getElementById('coche');
+            const parabrisas = document.getElementById('parabrisas');
+            const paula = document.getElementById('paula');
+            const botonInteractuar = document.getElementById('botonInteractuar');
+
+            coche.style.left = 'calc(100% - 160px)';
+            parabrisas.style.left = 'calc(100% - 100px)';
+
+            setTimeout(() => {
+                paula.style.display = 'block';
+                paula.style.right = '160px';
+
+                botonInteractuar.style.display = 'block';
+            }, 2000);
+        }
+
+        function mostrarBocadillo() {
+            const parabrisas = document.getElementById('parabrisas');
+            const bocadillo = document.getElementById('bocadillo');
+            const botonInteractuar = document.getElementById('botonInteractuar');
+            const botonBajas = document.getElementById('botonBajas');
+            const paula = document.getElementById('paula');
+
+            const parabrisasRect = parabrisas.getBoundingClientRect();
+
+            bocadillo.style.top = `${parabrisasRect.top - 100}px`;
+            bocadillo.style.left = `${parabrisasRect.left + 10}px`;
+            bocadillo.style.display = 'block';
+
+            setTimeout(() => {
+                bocadillo.style.display = 'none';
+            }, 3000);
+
+            botonInteractuar.style.display = 'none';
+
+            setTimeout(() => {
+                const paulaRect = paula.getBoundingClientRect();
+                botonBajas.style.top = `${paulaRect.top - 50}px`;
+                botonBajas.style.left = `${paulaRect.left + 10}px`;
+                botonBajas.style.display = 'block';
+            }, 2000);
+        }
+
+        function moverPaula() {
+            const paula = document.getElementById('paula');
+            const botonBajas = document.getElementById('botonBajas');
+            const botonInteractuarNuevo = document.getElementById('botonInteractuarNuevo');
+
+            paula.src = "NOABRIR/PAULA2.png";
+            paula.style.position = "absolute";
+            paula.style.top = "20px";
+            paula.style.left = "1280px";
+            paula.style.transition = "all 0.5s ease";
+
+            botonBajas.style.display = "none";
+
+            botonInteractuarNuevo.style.display = 'block';
+        }
+
+        function mostrarBocadillos() {
+            const parabrisas = document.getElementById('parabrisas');
+            const bocadilloPablo = document.getElementById('bocadilloPablo');
+            const bocadilloPaula = document.getElementById('bocadilloPaula');
+            const paula = document.getElementById('paula');
+            const botonInteractuarNuevo = document.getElementById('botonInteractuarNuevo');
+            const botonVamos = document.getElementById('botonVamos');
+
+            const parabrisasRect = parabrisas.getBoundingClientRect();
+            bocadilloPablo.style.top = `${parabrisasRect.top - 100}px`;
+            bocadilloPablo.style.left = `${parabrisasRect.left + 10}px`;
+            bocadilloPablo.style.display = 'block';
+
+            const paulaRect = paula.getBoundingClientRect();
+            bocadilloPaula.style.top = `${paulaRect.top - 100}px`;
+            bocadilloPaula.style.left = `${paulaRect.left}px`;
+            bocadilloPaula.style.display = 'block';
+
+            setTimeout(() => {
+                bocadilloPablo.style.display = 'none';
+                bocadilloPaula.style.display = 'none';
+                botonInteractuarNuevo.style.display = 'none';
+
+                setTimeout(() => {
+                    botonVamos.style.display = 'block';
+                }, 1000);
+            }, 3000);
+        }
+
+        function volverInicio() {
+            const coche = document.getElementById('coche');
+            const parabrisas = document.getElementById('parabrisas');
+            const paula = document.getElementById('paula');
+            const botonVamos = document.getElementById('botonVamos');
+
+            coche.style.transition = 'left 2s linear';
+            parabrisas.style.transition = 'left 2s linear';
+            paula.style.transition = 'left 2s linear, top 2s linear';
+
+            coche.style.left = '10px';
+            parabrisas.style.left = '60px';
+            paula.style.left = '60px';
+            paula.style.top = 'calc(100% - 150px)';
+            paula.style.display = 'block';
+
+            botonVamos.style.display = 'none';
+
+            // Mostrar la ventana emergente con el video
+            setTimeout(() => {
+                document.getElementById('videoModal').style.display = 'flex';
+            }, 2000);
+        }
+
+        function cerrarModal() {
+            document.getElementById('videoModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

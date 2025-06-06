@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador regresivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            background-color: white; /* Fondo blanco para el área vacía */
+        }
+        .contador {
+            text-align: center;
+            color: #007b83;
+            text-shadow: 0 0 5px #005f66, 0 0 5px #005f66, 0 0 4px #005f66;
+            font-size: 4rem;
+            font-weight: bold;
+        }
+        .contador h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b0e0e6;
+            text-shadow: 0 0 0px #007b83, 0 0 6px #007b83;
+        }
+        .contador .tiempo {
+            font-size: 4rem;
+        }
+        .mensaje {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #333333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 12px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+        .play-button {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            background-color: #007b83;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .play-button:hover {
+            background-color: #005f66;
+        }
+    </style>
+</head>
+<body>
+    <div class="contador">
+        <h1>Tiempo restante hasta el 31 de enero a las 21:00</h1>
+        <div class="tiempo" id="tiempo">Cargando...</div>
+    </div>
+
+    <div class="mensaje" id="mensaje">
+        Hoy esta monada se convierte en enfermera
+    </div>
+
+    <audio id="audio" src="CANCION/roki.mp3" preload="auto"></audio>
+
+    <button class="play-button" id="playButton">Reproducir Canción</button>
+
+    <script>
+        function actualizarContador() {
+            const fechaObjetivo = new Date("2025-01-31T21:00:00").getTime();
+            const ahora = new Date().getTime();
+            const diferencia = fechaObjetivo - ahora;
+
+            if (diferencia <= 0) {
+                document.getElementById("tiempo").innerText = "¡La fecha ha llegado!";
+                clearInterval(intervalo);
+                return;
+            }
+
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById("tiempo").innerText =
+                `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+        }
+
+        function cambiarFondo() {
+            const ahora = new Date();
+            const hora = ahora.getHours();
+            const minuto = ahora.getMinutes();
+
+            // Si es 06:58 o después, cambia el fondo a IMAGENES/si.jpg
+            if (hora > 15 || (hora === 15 && minuto >= 30)) {
+                document.body.style.backgroundImage = "url('IMAGENES/si.jpg')";
+                document.body.style.backgroundSize = "40%"; /* Imagen más pequeña */
+                document.getElementById("mensaje").innerText = "OLEEEEEE YA ERES ENFERMERA"; // Cambia el mensaje
+                document.getElementById("audio").pause(); // Detiene la canción
+                document.getElementById("audio").currentTime = 0; // Reposiciona la canción al inicio
+                document.getElementById("playButton").style.display = "none"; // Oculta el botón de reproducir
+            } else {
+                document.body.style.backgroundImage = "url('IMAGENES/no.jpg')";
+                document.body.style.backgroundSize = "100%"; /* Fondo normal */
+                document.getElementById("mensaje").innerText = "Hoy esta monada se convierte en enfermera";
+                document.getElementById("audio").play(); // Reproduce la canción si aún no se ha detenido
+                document.getElementById("playButton").style.display = "block"; // Muestra el botón para reproducir
+            }
+        }
+
+        const intervalo = setInterval(actualizarContador, 1000);
+        actualizarContador();
+
+        cambiarFondo(); // Cambia el fondo al cargar la página
+        setInterval(cambiarFondo, 60 * 1000); // Verifica cada minuto si debe cambiar el fondo
+
+        // Reproducir la canción al hacer clic en el botón
+        document.getElementById("playButton").addEventListener("click", function() {
+            document.getElementById("audio").play();
+            this.style.display = "none"; // Oculta el botón después de hacer clic
+        });
+    </script>
+</body>
+</html>

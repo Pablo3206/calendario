@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nosotros</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: pink;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+    }
+    .botones {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    button {
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      background-color: white;
+      color: black;
+    }
+    button:active {
+      transform: scale(0.9);
+    }
+    .carousel {
+      width: 500px;
+      height: 600px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+    }
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .carousel img.active {
+      opacity: 1;
+    }
+    .coming-soon {
+      font-size: 1.5rem;
+      color: #555;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Elige una opción:</h1>
+  <div class="botones">
+    <button onclick="cargarImagenes('SHREK')">SHREK</button>
+    <button onclick="cargarImagenes('SIMPSON')">SIMPSON</button>
+    <button onclick="cargarImagenes('DISNEY')">DISNEY</button>
+    <button onclick="cargarImagenes('PIXAR')">PIXAR</button>
+    <button onclick="cargarImagenes('STUDIOGHIBI')">STUDIO GHIBI</button>
+    <button onclick="cargarImagenes('SNOOPY')">SNOOPY</button>
+  </div>
+
+  <div class="carousel" id="carousel"></div>
+
+  <script>
+    let indice = 0;
+    let imagenes = [];
+    let intervalo;
+
+    function cargarImagenes(carpeta) {
+      clearInterval(intervalo);
+      const carousel = document.getElementById('carousel');
+      carousel.innerHTML = '';
+
+      const nombresImagenes = ['1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png', '8.png'];
+
+      const promesas = nombresImagenes.map(nombre => {
+        return new Promise(resolve => {
+          const img = new Image();
+          let alreadyResolved = false;
+          
+          function resolver(resultado) {
+            if (!alreadyResolved) {
+              alreadyResolved = true;
+              resolve(resultado);
+            }
+          }
+
+          img.onload = () => resolver(img);
+          img.onerror = () => resolver(null);
+          img.src = `${carpeta}/${nombre}`;
+          
+          // Si la imagen ya está en caché, se usa un pequeño timeout para verificarla.
+          if (img.complete) {
+            setTimeout(() => {
+              resolver(img.naturalWidth ? img : null);
+            }, 50);
+          }
+        });
+      });
+
+      Promise.all(promesas).then(resultados => {
+        const loadedImages = resultados.filter(img => img !== null);
+
+        if (loadedImages.length === 0) {
+          const mensaje = document.createElement('div');
+          mensaje.className = 'coming-soon';
+          mensaje.innerText = '¡Coming soon...!';
+          carousel.appendChild(mensaje);
+        } else {
+          // Mezcla las imágenes aleatoriamente
+          loadedImages.sort(() => Math.random() - 0.5);
+          loadedImages.forEach((img, index) => {
+            if (index === 0) img.classList.add('active');
+            carousel.appendChild(img);
+          });
+          imagenes = loadedImages;
+          indice = 0;
+          intervalo = setInterval(() => {
+            imagenes[indice].classList.remove('active');
+            indice = (indice + 1) % imagenes.length;
+            imagenes[indice].classList.add('active');
+          }, 2000);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
