@@ -571,6 +571,19 @@ if (openFrikiBtn) {
     if (trabajosModal) trabajosModal.classList.remove('hidden');
   });
 }
+const btnBonito = document.getElementById('btnBonito');
+if (btnBonito) {
+  btnBonito.addEventListener('click', () => {
+    const opciones = [
+      'bonito/oso/index.html',
+      'bonito/pistola/index.html',
+      'bonito/arbol/index.html',
+      'bonito/hamster/index.html'
+    ];
+    const aleatorio = opciones[Math.floor(Math.random() * opciones.length)];
+    window.location.href = aleatorio;
+  });
+}
 
 function createEventOnCalendar(dateStr, title, startTime, endTime, classes, evObj = {}) {
   // Construir el objeto completo del evento
