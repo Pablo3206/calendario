@@ -200,6 +200,16 @@
               </div>
               <span>Notificaciones</span>
             </button>
+            <button
+              id="historiaBtn"
+              class="w-full py-3 px-4 bg-green-100 rounded-md flex items-center text-green-600 !rounded-button whitespace-nowrap"
+            >
+              <div class="w-6 h-6 flex items-center justify-center mr-3">
+                <i class="ri-book-line"></i>
+              </div>
+              <span>Historia</span>
+            </button>
+
           </div>
         </div>
         <!-- Recordatorios -->
@@ -706,6 +716,29 @@
   </div>
 </div>
 
+<!-- Modal Historia -->
+<div
+  id="historiaModal"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center space-y-4">
+    <button
+      id="closeHistoriaModal"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+    <div class="grid grid-cols-2 gap-4 justify-center">
+      <button onclick="window.location.href='../apps/app1/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">APP1</button>
+      <button onclick="window.location.href='../apps/app2/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">APP2</button>
+      <button onclick="window.location.href='../apps/app3/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">APP3</button>
+      <button onclick="window.location.href='../apps/app4/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">APP4</button>
+      <button onclick="window.location.href='../apps/app5/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">APP5</button>
+      <button onclick="window.location.href='../apps/Felicidades/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">FELICIDADES</button>
+      <button onclick="window.location.href='../apps/pauli/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">PAULI</button>
+      <button onclick="window.location.href='../apps/ABREME/index.html'" class="bg-green-200 hover:bg-green-300 text-green-800 py-2 px-4 rounded-lg">ANIMATE</button>
+    </div>
+    
+  </div>
+</div>
 
 
 <!-- Modal para Vista Día -->

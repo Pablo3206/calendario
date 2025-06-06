@@ -814,7 +814,19 @@ crearEventoModal.classList.remove("hidden");
 
 
 
-
+  const historiaBtn = document.getElementById("historiaBtn");
+  const historiaModal = document.getElementById("historiaModal");
+  const closeHistoriaModal = document.getElementById("closeHistoriaModal");
+  
+  if (historiaBtn && historiaModal && closeHistoriaModal) {
+    historiaBtn.addEventListener("click", () => {
+      historiaModal.classList.remove("hidden");
+    });
+    closeHistoriaModal.addEventListener("click", () => {
+      historiaModal.classList.add("hidden");
+    });
+  }
+  
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1) Asegúrate de que estas variables están definidas arriba en tu script:
