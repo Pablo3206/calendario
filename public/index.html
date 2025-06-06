@@ -545,8 +545,45 @@
         >
           Nuevo
         </button>
+        <button
+        type="button"
+        id="repetirTurnoBtn"
+        class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-200"
+      >
+        Repetición
+      </button>
       </div>
     </form>
+  </div>
+</div>
+<!-- Modal Repetición de Turnos Hospi -->
+<div
+  id="modalRepeticionHospi"
+  class="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center hidden z-50"
+>
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <button
+      id="cerrarRepeticion"
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl leading-none"
+    >&times;</button>
+
+    <h3 class="text-xl font-semibold mb-4 text-center">Repetir Turno</h3>
+
+    <!-- Selector de turno -->
+    <label class="block mb-2 font-medium text-gray-700">Selecciona tipo de turno</label>
+    <select id="selectorTurno" class="w-full border rounded px-3 py-2 mb-4"></select>
+
+    <!-- Mini calendario -->
+    <label class="block mb-2 font-medium text-gray-700">Selecciona los días</label>
+    <div id="miniCalendario" class="grid grid-cols-7 gap-2 text-center text-sm mb-4"></div>
+
+    <!-- Botón de confirmación -->
+    <button
+      id="confirmarRepeticion"
+      class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg"
+    >
+      Crear turnos seleccionados
+    </button>
   </div>
 </div>
 

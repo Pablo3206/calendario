@@ -584,6 +584,91 @@ if (btnBonito) {
     window.location.href = aleatorio;
   });
 }
+const modalRepeticionHospi = document.getElementById("modalRepeticionHospi");
+const repetirTurnoBtn = document.getElementById("repetirTurnoBtn");
+const cerrarRepeticion = document.getElementById("cerrarRepeticion");
+const selectorTurno = document.getElementById("selectorTurno");
+const miniCalendario = document.getElementById("miniCalendario");
+const confirmarRepeticion = document.getElementById("confirmarRepeticion");
+
+let turnosDisponibles = [];
+let fechasSeleccionadas = new Set();
+
+// Abrir modal
+if (repetirTurnoBtn && modalRepeticionHospi) {
+  repetirTurnoBtn.addEventListener("click", async () => {
+    modalRepeticionHospi.classList.remove("hidden");
+
+    // Cargar turnos
+    const res = await fetch("/api/tipos?categoria=turno");
+    turnosDisponibles = await res.json();
+    selectorTurno.innerHTML = turnosDisponibles.map(
+      t => `<option value="${t.id}">${t.nombre}: ${t.inicio} - ${t.fin}</option>`
+    ).join("");
+
+    // Crear minicalendario (30 días desde hoy)
+    const hoy = new Date();
+    miniCalendario.innerHTML = "";
+    fechasSeleccionadas.clear();
+    for (let i = 0; i < 30; i++) {
+      const fecha = new Date(hoy);
+      fecha.setDate(hoy.getDate() + i);
+      const fechaStr = fecha.toISOString().split("T")[0];
+      const diaBtn = document.createElement("button");
+      diaBtn.textContent = fecha.getDate();
+      diaBtn.className = "bg-gray-100 px-2 py-1 rounded hover:bg-blue-200";
+      diaBtn.dataset.fecha = fechaStr;
+      diaBtn.addEventListener("click", () => {
+        if (fechasSeleccionadas.has(fechaStr)) {
+          fechasSeleccionadas.delete(fechaStr);
+          diaBtn.classList.remove("bg-blue-500", "text-white");
+        } else {
+          fechasSeleccionadas.add(fechaStr);
+          diaBtn.classList.add("bg-blue-500", "text-white");
+        }
+      });
+      miniCalendario.appendChild(diaBtn);
+    }
+  });
+}
+
+// Cerrar modal
+if (cerrarRepeticion) {
+  cerrarRepeticion.addEventListener("click", () => {
+    modalRepeticionHospi.classList.add("hidden");
+  });
+}
+
+// Confirmar creación
+if (confirmarRepeticion) {
+  confirmarRepeticion.addEventListener("click", async () => {
+    const turnoId = selectorTurno.value;
+    const turno = turnosDisponibles.find(t => String(t.id) === turnoId);
+    if (!turno || fechasSeleccionadas.size === 0) {
+      alert("Selecciona al menos un turno y una fecha");
+      return;
+    }
+
+    for (let fecha of fechasSeleccionadas) {
+      await fetch("/api/eventos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          titulo:      turno.nombre,
+          descripcion: "Turno repetido",
+          ubicacion:   "Hospi",
+          fecha_inicio: `${fecha}T${turno.inicio}`,
+          fecha_fin:    `${fecha}T${turno.fin}`,
+          usuario:     "hospi",
+          tipo_id:     turno.id
+        })
+      });
+    }
+
+    modalRepeticionHospi.classList.add("hidden");
+    await refreshEvents();  // si ya tienes esta función, recarga la vista
+  });
+}
 
 function createEventOnCalendar(dateStr, title, startTime, endTime, classes, evObj = {}) {
   // Construir el objeto completo del evento
